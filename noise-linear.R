@@ -46,14 +46,12 @@ ggplot(data = plt_dt, aes(x = x1, y = x2, colour = class)) +
   theme_bw() + 
   coord_fixed() + 
   theme(legend.position = c(0.1, 0.8))
-ggsave("noise10-rawdata.eps", width=5)
 
 # gb generation
 plt <- gb_plot(x, y, purity = 0.95)
 
 plt + 
   theme(legend.position = c(0.1, 0.8))
-ggsave("noise10-granulation.eps", width=5)
 
 ## gbtsvm
 TuningSeq <- 2^seq(-8,8,2)
@@ -82,5 +80,4 @@ plt +
               intercept = -(op_gbtsvm$bavg/(op_gbtsvm$wavg[2])), 
               linewidth = 1, linetype = "dashed")+
   theme(legend.position = c(0.1, 0.8))
-ggsave("noise10-comparison.eps", width=5)
 
