@@ -4,16 +4,8 @@ library(ggplot2)
 library(reshape2)
 library(MASS)
 
-source("program/gb_ball.R")
-source("program/gb_fun.R")
-source("program/gb_plot.R")
-source("program/circle_dt_fun.R")
-
 source("program/gbtsvm.R")
-source("program/cv_gbtsvm.R")
-
 source("program/gbrgtsvm.R")
-source("program/cv_gbrgtsvm.R")
 
 source("program/ParameterGrid.R")
 source("program/gaussian_kernel.R")
@@ -40,42 +32,19 @@ plt_dt <- as.data.frame(cbind(x, y))
 colnames(plt_dt) <- c("x1", "x2", "class")
 plt_dt$class <- as.factor(plt_dt$class)
 
-ggplot(data = plt_dt, aes(x = x1, y = x2, colour = class)) + 
-  geom_point(aes(shape = class), size = 2) + 
-  scale_colour_manual(values = c("blue", "red"))+
-  theme_bw() + 
-  coord_fixed() + 
-  theme(legend.position = c(0.9, 0.8))
-
 # gb generation
 plt <- gb_plot(x, y, purity = 0.95)
 
-plt + 
-  theme(legend.position = c(0.9, 0.8))
-
 ## gbtsvm
-TuningSeq <- 2^seq(-8,8,2)
-gbtsvm_tuning <- ParameterGrid(list(lam1 = TuningSeq, lam2 = TuningSeq, sigma = TuningSeq))
-
-cvgbtsvm <- cv_gbtsvm(x, y, gbtsvm_tuning, kernel = "gaussian")
-gbtsvm_op_tuning <- cvgbtsvm[-c(1,2)]
-
+gbtsvm_op_tuning <- c(0.0625, 64, 0.25)
 op_gbtsvm <- gbtsvm(x, y, lam1=gbtsvm_op_tuning[1], lam2=gbtsvm_op_tuning[2],
                     kernel = "gaussian", sigma = gbtsvm_op_tuning[3])
 
 ## gbrgtsvm
-TuningSeq <- 2^seq(-8,8,2)
-gbrgtsvm_tuning <- ParameterGrid(list(lam = c(1,3,5), a = 1, lam1 = TuningSeq, 
-                                      lam2 = TuningSeq, sigma = TuningSeq))
-
-cvgbrgtsvm <- cv_gbrgtsvm(x, y, gbrgtsvm_tuning, kernel = "gaussian")
-gbrgtsvm_op_tuning <- cvgbrgtsvm[-c(1,2)]
-
+gbrgtsvm_op_tuning <- c(5,1,1,1,1)
 op_gbrgtsvm <- gbrgtsvm(x, y, lam=gbrgtsvm_op_tuning[1], a=gbrgtsvm_op_tuning[2], 
                         lam1=gbrgtsvm_op_tuning[3], lam2=gbrgtsvm_op_tuning[4],
                         kernel = "gaussian", sigma = gbrgtsvm_op_tuning[5])
-op_gbtsvm <- gbtsvm(x, y, lam1=gbtsvm_op_tuning[1], lam2=gbtsvm_op_tuning[2],
-                    kernel = "gaussian", sigma = gbtsvm_op_tuning[3])
 
 ## plot
 plot_x1 <- seq(-2.5, 2.5, length.out = 100)
