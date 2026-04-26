@@ -4,6 +4,11 @@ library(ggplot2)
 library(reshape2)
 library(MASS)
 
+source("program/gb_ball.R")
+source("program/gb_fun.R")
+source("program/gb_plot.R")
+source("program/circle_dt_fun.R")
+
 source("program/gbtsvm.R")
 source("program/cv_gbtsvm.R")
 
@@ -41,14 +46,12 @@ ggplot(data = plt_dt, aes(x = x1, y = x2, colour = class)) +
   theme_bw() + 
   coord_fixed() + 
   theme(legend.position = c(0.9, 0.8))
-ggsave("noise10-sine-rawdata.eps", width=5, height = 4.5)
 
 # gb generation
 plt <- gb_plot(x, y, purity = 0.95)
 
 plt + 
   theme(legend.position = c(0.9, 0.8))
-ggsave("noise10-sine-granulation.eps", width=5, height = 4.5)
 
 ## gbtsvm
 TuningSeq <- 2^seq(-8,8,2)
@@ -114,5 +117,4 @@ plt +
   scale_x_continuous(limits = c(-2.1, 2.1)) + 
   scale_y_continuous(limits = c(-2, 2)) +
   theme(legend.position = c(0.9, 0.8))
-ggsave("noise10-sine-comparison.eps", width=5, height = 4.5)
 
