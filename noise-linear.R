@@ -3,6 +3,11 @@ rm(list = ls())
 library(ggplot2)
 library(MASS)
 
+source("program/gb_ball.R")
+source("program/gb_fun.R")
+source("program/gb_plot.R")
+source("program/circle_dt_fun.R")
+
 source("program/gbtsvm.R")
 source("program/cv_gbtsvm.R")
 
